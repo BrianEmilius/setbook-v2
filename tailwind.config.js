@@ -4,7 +4,13 @@ module.exports = {
 		"./src/**/*.{js,jsx,ts,tsx}",
 	],
 	theme: {
+		backdropFilter: {
+			none: "none",
+			blur: "blur(20px)"
+		},
 		extend: {},
 	},
-	plugins: [],
+	plugins: [
+		require("tailwindcss-filters")
+	],
 }

@@ -1,6 +1,5 @@
-var connect = require("../mongodb")
-var validToken = require("../validateToken")
-var parseToken = require("../parseToken")
+const connect = require("../mongodb")
+const validToken = require("../validateToken")
 const { ObjectId } = require("mongodb")
 
 async function getExercises(db, user) {
@@ -37,6 +36,6 @@ module.exports.handler = async function(event, context) {
 	}
 
 	var db = await connect()
-	var userId = parseToken(event.headers.authorization).data.id
+	var userId = validToken(event.headers.authorization).data.id
 	return getExercises(db, userId)
 }

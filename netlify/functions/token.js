@@ -1,10 +1,10 @@
-var bcrypt = require("bcrypt")
-var connect = require("../mongodb")
-var Token = require("signed-jwt")
-var secret = process.env.TOKEN_SECRET
+const bcrypt = require("bcrypt")
+const connect = require("../mongodb")
+const jwt = require("jsonwebtoken")
+const secret = process.env.TOKEN_SECRET
 
 async function getUser(db, email, password) {
-	var result = await db.collection("users").find({ email }).toArray()
+	const result = await db.collection("users").find({ email }).toArray()
 
 	if (result.length === 0) {
 		return {
@@ -14,7 +14,7 @@ async function getUser(db, email, password) {
 	}
 
 	try {
-		var isValid = await bcrypt.compare(password, result[0].password)
+		const isValid = await bcrypt.compare(password, result[0].password)
 
 		if (!isValid) {
 			return {
@@ -23,9 +23,15 @@ async function getUser(db, email, password) {
 			}
 		}
 
+		const exp = Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 30)
+
 		return {
 			statusCode: 201,
-			body: Token({ id: result[0]._id }, secret)
+			body: JSON.stringify({
+				token: jwt.sign({ exp, data: {id: result[0]._id} }, secret),
+				maxAge: 60 * 60 * 24 * 30
+			})
+				
 		}
 	} catch (error) {
 		console.log(error)
@@ -36,7 +42,7 @@ async function getUser(db, email, password) {
 	}
 }
 
-module.exports.handler = async function(event, context) {
+exports.handler = async function(event, context) {
 	context.callbackWaitsForEmptyEventLoop = false
 
 	// Check HTTP Method
@@ -50,8 +56,8 @@ module.exports.handler = async function(event, context) {
 		}
 	}
 
-	var db = await connect()
-	var body = JSON.parse(event.body)
+	const db = await connect()
+	const body = JSON.parse(event.body)
 
 	return getUser(db, body.email, body.password)
 }

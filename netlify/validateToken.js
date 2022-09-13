@@ -1,6 +1,11 @@
-var Token = require("signed-jwt")
-var TOKEN_SECRET = process.env.TOKEN_SECRET
+const jwt = require("jsonwebtoken")
+const TOKEN_SECRET = process.env.TOKEN_SECRET
 
 module.exports = function(token) {
-	return Token.validate(token, TOKEN_SECRET)
+	try {
+		return jwt.verify(token, TOKEN_SECRET)
+	} catch (error) {
+		console.log(error)
+		return false
+	}
 }
