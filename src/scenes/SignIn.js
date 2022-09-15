@@ -53,7 +53,8 @@ export default function SigIn() {
 
 	return (
 		<div
-			style={{backgroundImage: `url(${splash})`, backgroundSize: "cover", height: "100vh"}}
+			style={{backgroundImage: `url(${splash})`, backgroundSize: "cover", height: "100vh", backgroundPositionX: "75%"}}
+			className="flex items-center flex-col justify-center"
 		>
 			<h1>Sign In</h1>
 			<form onSubmit={handleSubmit} className="flex flex-col px-4">

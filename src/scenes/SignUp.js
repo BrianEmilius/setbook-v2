@@ -1,6 +1,7 @@
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
+import splash from "../splash-image-lg.jpg"
 
 export default function SignUp() {
 	const navigate = useNavigate()
@@ -34,15 +35,19 @@ export default function SignUp() {
 	}
 
 	return (
-		<form onSubmit={handleSubmit}>
-			<h1 className="text-lg font-bold">Sign Up For Free</h1>
-			<div>
-				<label>
-					Email
-					<input type="email" name="email" className="block" placeholder="your@email.com" />
-				</label>
-			</div>
-			<button type="submit" className="bg-slate-500 text-white rounded-sm px-5 py-2">Sign up</button>
-		</form>
+		<div
+			style={{backgroundImage: `url(${splash})`, backgroundSize: "cover", height: "100vh", backgroundPositionX: "75%"}}
+		>
+			<form onSubmit={handleSubmit}>
+				<h1 className="text-lg font-bold">Sign Up For Free</h1>
+				<div>
+					<label>
+						Email
+						<input type="email" name="email" className="block" placeholder="your@email.com" />
+					</label>
+				</div>
+				<button type="submit" className="bg-slate-500 text-white rounded-sm px-5 py-2">Sign up</button>
+			</form>
+		</div>
 	)
 }
