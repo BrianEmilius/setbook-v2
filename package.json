@@ -7,12 +7,18 @@
 		"@testing-library/react": "^13.4.0",
 		"@testing-library/user-event": "^13.5.0",
 		"axios": "^0.27.2",
+		"bcrypt": "^5.0.1",
 		"framer-motion": "^7.3.2",
+		"jsonwebtoken": "^8.5.1",
+		"mongodb": "^4.9.1",
 		"react": "^18.2.0",
+		"react-cookie": "^4.1.1",
 		"react-dom": "^18.2.0",
 		"react-feather": "^2.0.10",
 		"react-router-dom": "^6.3.0",
 		"react-scripts": "5.0.1",
+		"react-toastify": "^9.0.8",
+		"sendmail": "^1.6.1",
 		"web-vitals": "^2.1.4"
 	},
 	"scripts": {

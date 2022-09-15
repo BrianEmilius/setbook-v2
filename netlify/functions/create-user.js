@@ -1,23 +1,44 @@
-var connect = require("../mongodb")
-var bcrypt = require("bcrypt")
+const connect = require("../mongodb")
+const { randomBytes } = require("crypto")
+const sendmail = require("sendmail")({
+	smtpHost:'localhost',
+	smtpPort: 25
+})
 
 async function getUser(db, user) {
-	var result = await db.collection("users").find({ email: user }).toArray()
+	const result = await db.collection("users").find({ email: user }).toArray()
 	return result.length === 0 ? false : true
 }
 
-async function createUser(db, email, password) {
-	var result = await db.collection("users").insertOne({
-		email, password
+async function createUser(db, email) {
+	const activationCode = randomBytes(32).toString('hex')
+	
+	const result = await db.collection("users").insertOne({
+		email,
+		activationCode,
+		active: false,
+		createdAt: new Date().toISOString()
+	})
+
+	sendmail({
+		from: "no-reply@topshelf.dk",
+		to: email,
+		subject: "Activate your account",
+		html: `<h1>Welcome to SetBook</h1>
+		<p>Please click this link to activate your account</p>
+		<p><a href="http://localhost:8888/activate-account?e=${email}&c=${activationCode}">http://localhost:8888/activate-account?e=${email}&c=${activationCode}</a></p>`
+	}, function(err, reply) {
+		console.log(err)
+		console.dir(reply)
 	})
 
 	return {
 		statusCode: 201,
-		body: JSON.stringify(result.ops[0])
+		body: JSON.stringify(result)
 	}
 }
 
-module.exports.handler = async function (event, context) {
+exports.handler = async function (event, context) {
 	context.callbackWaitsForEmptyEventLoop = false
 	
 	// Check HTTP Method
@@ -31,8 +52,17 @@ module.exports.handler = async function (event, context) {
 		}
 	}
 
-	var db = await connect()
-	var body = JSON.parse(event.body)
+	const body = JSON.parse(event.body)
+	
+	// Validate fields
+	if (!body.email) {
+		return {
+			statusCode: 406,
+			body: "NOT ACCEPTABLE"
+		}
+	}
+
+	const db = await connect()
 
 	// Check if a user alredy exists with this email
 	if (await getUser(db, body.email)) {
@@ -42,13 +72,8 @@ module.exports.handler = async function (event, context) {
 		}
 	}
 
-	var saltRounds = 10;
-
 	try {
-		var salt = await bcrypt.genSalt(saltRounds)
-		var hash = await bcrypt.hash(body.password, salt)
-
-		return createUser(db, body.email, hash)
+		return createUser(db, body.email)
 	} catch (error) {
 		console.log(error)
 		return {
