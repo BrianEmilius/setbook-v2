@@ -1,27 +1,25 @@
-import axios from "axios"
 import { useContext, useEffect } from "react"
+import { toast } from "react-toastify"
+import ExerciseListItem from "../components/ExerciseListItem"
 import Overlay from "../components/Overlay"
+import useAxios from "../hooks/useAxios"
 import PageHeaderContext from "../PageHeaderContext"
-import TokenContext from "../TokenContext"
 
 export default function Excersises() {
-	const {token} = useContext(TokenContext)
 	const {setPageHeader} = useContext(PageHeaderContext)
-
+	const { data, loading, error } = useAxios("/.netlify/functions/get-exercises")
+	
 	useEffect(function() {
 		setPageHeader({title: "Exercises", back: false})
+		if (error) {
+			toast.error(error)
+		}
+	}, [error])
 
-		axios.get("/.netlify/functions/get-exercises", {
-			headers: {
-				authorization: token
-			}
-		})
-			.then(res=>console.log(res))
-	}, [])
 	return (
 		<>
+			{data?.map(exercise => <ExerciseListItem key={exercise._id} title={exercise.title} />)}
 			<Overlay show={false}>
-				flergh
 			</Overlay>
 		</>
 	)

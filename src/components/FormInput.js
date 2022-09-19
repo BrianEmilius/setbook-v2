@@ -22,14 +22,14 @@ export default function FormInput({ type, name, label, placeholder }) {
 		<div className="relative">
 			<label
 				htmlFor={id}
-				className={isFocused ? "transition-all absolute left-2 text-xs" : "transition-all absolute left-2 top-3"}>
+				className={isFocused ? "transition-all absolute left-2 text-xs top-1" : "transition-all absolute left-2 top-4"}>
 				{label}
 			</label>
 			<input
 				type={type}
 				name={name}
 				id={id}
-				className="w-full px-2 pb-2 pt-3 outline-none focus:border-blue-500 border-b-4 border-transparent box-border"
+				className="w-full px-2 pb-2 pt-3 my-1 outline-none focus:border-blue-500 border-b-4 border-transparent box-border"
 				onFocus={focusHandler}
 				onBlur={focusHandler}
 				onChange={e => setValue(e.target.value)}

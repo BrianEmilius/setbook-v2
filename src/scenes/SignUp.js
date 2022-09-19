@@ -1,7 +1,7 @@
 import axios from "axios"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
-import splash from "../splash-image-lg.jpg"
+import FormInput from "../components/FormInput"
 
 export default function SignUp() {
 	const navigate = useNavigate()
@@ -35,19 +35,18 @@ export default function SignUp() {
 	}
 
 	return (
-		<div
-			style={{backgroundImage: `url(${splash})`, backgroundSize: "cover", height: "100vh", backgroundPositionX: "75%"}}
-		>
-			<form onSubmit={handleSubmit}>
-				<h1 className="text-lg font-bold">Sign Up For Free</h1>
-				<div>
-					<label>
-						Email
-						<input type="email" name="email" className="block" placeholder="your@email.com" />
-					</label>
-				</div>
-				<button type="submit" className="bg-slate-500 text-white rounded-sm px-5 py-2">Sign up</button>
-			</form>
-		</div>
+		<form onSubmit={handleSubmit} className="flex flex-col w-full">
+			<h1 className="text-lg font-bold text-white">Sign Up For Free</h1>
+			<FormInput type="email" name="email" label="Email" />
+			<label className="text-white my-3 form-check-label inline-block">
+				<input
+					type="checkbox"
+					name="acceptTOS"
+					className="w-4 h-4 text-blue-600 bg-gray-100 rounded-sm border-gray-300 mr-3"
+				/>
+				I have read and accept the <a href="/TOS" className="text-blue-500 underline" target="_blank" rel="noopener">terms and conditions</a>
+			</label>
+			<button type="submit" className="bg-slate-500 text-white rounded-sm px-5 py-2 mt-3">Sign up</button>
+		</form>
 	)
 }
