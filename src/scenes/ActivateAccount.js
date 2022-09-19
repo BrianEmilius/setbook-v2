@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useSearchParams, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
-import splash from "../splash-image-lg.jpg"
+import FormInput from "../components/FormInput"
 
 export default function ActivateAccount() {
 	const [searchParams] = useSearchParams()
@@ -41,21 +41,11 @@ export default function ActivateAccount() {
 	}
 
 	return (
-		<div
-		style={{backgroundImage: `url(${splash})`, backgroundSize: "cover", height: "100vh", backgroundPositionX: "75%"}}
-		>
-			<form onSubmit={handleSubmit}>
-				<h1 className="text-lg font-bold">Activate Account</h1>
-				<p>Choose a password for the account {new URLSearchParams(searchParams).get("e")}</p>
-				<div>
-					<label>
-						Password
-						<input type="email" name="email" disabled hidden />
-						<input type="password" name="password" className="block" />
-					</label>
-				</div>
-				<button type="submit" className="bg-slate-500 text-white rounded-sm px-5 py-2">Activate</button>
-			</form>
-		</div>
+		<form onSubmit={handleSubmit} className="flex flex-col justify-center w-full">
+			<h1 className="text-lg font-bold text-white">Activate Account</h1>
+			<p className="text-white">Choose a password for the account {new URLSearchParams(searchParams).get("e")}</p>
+			<FormInput type="password" name="password" label="Password"/>
+			<button type="submit" className="bg-slate-500 text-white rounded-sm px-5 py-2">Activate</button>
+		</form>
 	)
 }
