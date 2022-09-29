@@ -1,26 +1,16 @@
-import { Disclosure } from "@headlessui/react"
-import { ChevronUp } from "react-feather"
+import { useNavigate } from "react-router-dom"
 
-export default function ExerciseListItem({title}) {
+export default function ExerciseListItem({title, id}) {
+	const navigate = useNavigate()
+
 	return (
-		<div className="bg-red-200">
-			<Disclosure>
-				{({open})=>(
-					<>
-						<Disclosure.Button className="flex w-full justify-between bg-purple-100 px-4 py-2 text-left text-sm font-medium text-purple-900 hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
-							<span>{title}</span>
-							<ChevronUp
-								className={`${
-									open ? 'rotate-180 transform' : ''
-								} h-5 w-5 text-white`}
-							/>
-						</Disclosure.Button>
-						<Disclosure.Panel>
-							blah blah blah
-						</Disclosure.Panel>
-					</>
-				)}
-			</Disclosure>
-		</div>
+		<li className="flex items-center even:bg-slate-200 px-2 py-2">
+			<button
+				className="w-full py-1 px-2 rounded-md text-left"
+				onClick={()=>navigate(`/exercise/${id}`)}
+			>
+				<span className="text-white">{title}</span>
+			</button>
+		</li>
 	)
 }
