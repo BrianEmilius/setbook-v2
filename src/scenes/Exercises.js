@@ -18,8 +18,11 @@ export default function Excersises() {
 
 	return (
 		<>
-			{data?.map(exercise => <ExerciseListItem key={exercise._id} title={exercise.title} />)}
+			<ul>
+				{data?.map(exercise => <ExerciseListItem key={exercise._id} id={exercise._id} title={exercise.title} />)}
+			</ul>
 			<Overlay show={false}>
+				floof
 			</Overlay>
 		</>
 	)
